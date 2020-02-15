@@ -43,6 +43,26 @@ def scrape(first_time = False):
     if first_time == True:
         return df.to_csv("./data/historical_total.csv",sep=";",index=False,header=False)
     else:return df.to_csv("./data/recent_total.csv",sep=";",index=False,header=False)
+
+ def check_update():
+    with open("./data/historical_total.csv") as old:
+        line_old = old.readline().split(";")
+    update = []
+    with open("./data/recent_total.csv") as new:
+        #line_new = new.readline().split(";")
+        n = 0
+        while True:
+            line_new = new.readline().split(";")
+            if line_new == line_old: 
+                break
+            else:
+                update.append(line_new)
+                n += 1
+    if n !=0: 
+        print("New positions found")
+        return n, update
+    else: return None
+    
     
 def main():
     im = False

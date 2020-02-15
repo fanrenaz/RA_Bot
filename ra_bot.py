@@ -28,6 +28,22 @@ def send_email(my_receiver, subject, body):
         ret=False
     return ret
 
+def scrape(first_time = False):
+    ourUrl=urllib.request.urlopen("https://www.nber.org/jobs/nonnberjobs.html")
+    soup=BeautifulSoup(ourUrl,'lxml')
+    results = []
+    for p in soup.find_all("p"):
+        each = p.text.split("\n")[:4]
+        link = p.a['href']
+        if link.startswith("http") is False:
+            link = "https://www.nber.org/jobs/"+link
+        each.append("Application Link: "+link)
+        results.append(each)
+    df = pd.DataFrame(results[1:-5])
+    if first_time == True:
+        return df.to_csv("./data/historical_total.csv",sep=";",index=False,header=False)
+    else:return df.to_csv("./data/recent_total.csv",sep=";",index=False,header=False)
+    
 def main():
     im = False
     while im == False:

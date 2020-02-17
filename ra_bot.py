@@ -63,6 +63,12 @@ def scrape(first_time = False):
         return n, update
     else: return None
     
+def construct_mail():
+    content = """New Positions Updated! \n
+                 \n"""   
+    for i in range(len(update)):
+        content = content+"The No.{} position updated.".format(i+1)+"\n"+"\n".join(update[i])+"\n"
+    return content
     
 def main():
     im = False
